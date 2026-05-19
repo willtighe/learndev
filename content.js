@@ -92,6 +92,156 @@ const STAGES = [
           { term: "DNS",        match: "Translates domain names into server addresses" }
         ]
       }
+    ],
+    quiz: [
+      {
+        type: "multiple-choice",
+        question: "You open Chrome and type google.com. What is Chrome in this situation?",
+        options: ["A server", "A browser", "A URL", "An HTML file"],
+        answer: "A browser",
+        explanation: "Chrome is a browser — software that requests pages and renders the files a server sends back."
+      },
+      {
+        type: "true-false",
+        question: "A server is just another name for a browser.",
+        answer: "false",
+        explanation: "A server stores and sends files. A browser requests and displays them. They do opposite jobs."
+      },
+      {
+        type: "fill-blank",
+        question: "When you type google.com and hit enter, your browser sends a request to a ___.",
+        options: ["server", "stylesheet", "pixel", "folder"],
+        answer: "server",
+        explanation: "The request goes to a server — a computer that stores files and sends them back to your browser."
+      },
+      {
+        type: "multiple-choice",
+        question: "A webpage looks completely unstyled — plain black text on white. Which file is most likely missing?",
+        options: ["The HTML file", "The CSS file", "The JavaScript file", "The server"],
+        answer: "The CSS file",
+        explanation: "CSS controls all visual styling. Without it, the page still loads but has no colors, fonts, or layout."
+      },
+      {
+        type: "true-false",
+        question: "Every website you visit is made up of files stored on a computer somewhere.",
+        answer: "true",
+        explanation: "Every website is just files — HTML, CSS, and JavaScript — sitting on a server waiting to be requested."
+      },
+      {
+        type: "fill-blank",
+        question: "HTML defines the ___ of a webpage, CSS defines the style, and JavaScript defines the behavior.",
+        options: ["structure", "color", "speed", "address"],
+        answer: "structure",
+        explanation: "HTML is the structure — it defines what exists on the page. CSS and JavaScript handle how it looks and acts."
+      },
+      {
+        type: "multiple-choice",
+        question: "You click a link and nothing happens — the page loads but buttons do not work. Which file is most likely broken?",
+        options: ["HTML", "CSS", "JavaScript", "DNS"],
+        answer: "JavaScript",
+        explanation: "JavaScript handles interactivity. If it is broken or missing, the page loads but nothing responds to clicks."
+      },
+      {
+        type: "true-false",
+        question: "DNS translates a domain name like google.com into the actual address of a server.",
+        answer: "true",
+        explanation: "DNS is like a phone book for the internet. It looks up domain names and returns the numeric address of the server."
+      },
+      {
+        type: "multiple-choice",
+        question: "What does URL stand for in plain terms?",
+        options: ["The file type of a webpage", "The address of a specific page on the web", "The language a browser speaks", "The speed of a server"],
+        answer: "The address of a specific page on the web",
+        explanation: "URL stands for Uniform Resource Locator — it is simply the address that tells your browser where to find a specific file on a server."
+      },
+      {
+        type: "fill-blank",
+        question: "The ___ is responsible for making a webpage interactive — handling clicks, animations, and live updates.",
+        options: ["JavaScript file", "HTML file", "CSS file", "DNS record"],
+        answer: "JavaScript file",
+        explanation: "JavaScript is the behavior layer. It listens for user actions and responds dynamically without reloading the page."
+      },
+      {
+        type: "true-false",
+        question: "When you visit a website, your browser downloads HTML, CSS, and JavaScript files and uses them to draw the page.",
+        answer: "true",
+        explanation: "This is exactly what happens. The browser requests the files, receives them from the server, and renders them into the page you see."
+      },
+      {
+        type: "multiple-choice",
+        question: "Which analogy best describes the relationship between HTML, CSS, and JavaScript?",
+        options: [
+          "Blueprint, paint, electricity",
+          "Address, server, browser",
+          "Request, response, render",
+          "Domain, path, file"
+        ],
+        answer: "Blueprint, paint, electricity",
+        explanation: "HTML is the blueprint (structure), CSS is the paint and furniture (style), and JavaScript is the electricity (behavior). Together they build the page."
+      },
+      {
+        type: "fill-blank",
+        question: "A ___ is a computer that is always on and connected to the internet, waiting to send files when requested.",
+        options: ["server", "browser", "router", "compiler"],
+        answer: "server",
+        explanation: "Servers are always-on computers that store websites and respond to requests from browsers around the world."
+      },
+      {
+        type: "true-false",
+        question: "You need special software to build a website — plain text files cannot make a webpage.",
+        answer: "false",
+        explanation: "A webpage is just a plain text file saved with a .html extension. Any text editor can create one. No special software required."
+      },
+      {
+        type: "multiple-choice",
+        question: "Your friend in another country types your website URL and sees your page. Where did your files come from?",
+        options: [
+          "They were copied to your friend's computer",
+          "They were sent from a server to your friend's browser",
+          "They were generated by your friend's browser",
+          "They came from your computer directly"
+        ],
+        answer: "They were sent from a server to your friend's browser",
+        explanation: "Your files live on a server. When your friend requests your URL, the server sends the files to their browser, which renders the page."
+      },
+      {
+        type: "fill-blank",
+        question: "When a browser receives HTML, CSS, and JavaScript files, it ___ them into the visual page you see.",
+        options: ["renders", "deletes", "compresses", "encrypts"],
+        answer: "renders",
+        explanation: "Rendering is the process of reading the three files and drawing the visual result on screen. It happens in milliseconds."
+      },
+      {
+        type: "true-false",
+        question: "CSS can make a button change color when you hover over it.",
+        answer: "true",
+        explanation: "CSS handles all visual states including hover effects. You can change color, size, border, and more just with CSS — no JavaScript needed for basic hover effects."
+      },
+      {
+        type: "multiple-choice",
+        question: "What is the job of DNS?",
+        options: [
+          "To store your website files",
+          "To translate domain names into server addresses",
+          "To render HTML into a visual page",
+          "To write JavaScript automatically"
+        ],
+        answer: "To translate domain names into server addresses",
+        explanation: "DNS — Domain Name System — is like a phone book. It converts a human-readable domain like google.com into the numeric IP address of the server that hosts it."
+      },
+      {
+        type: "fill-blank",
+        question: "The three file types that make up almost every webpage are HTML, CSS, and ___.",
+        options: ["JavaScript", "Python", "SQL", "XML"],
+        answer: "JavaScript",
+        explanation: "HTML, CSS, and JavaScript are the three languages of the web. Every browser in the world understands these three and only these three natively."
+      },
+      {
+        type: "true-false",
+        question: "A webpage can exist and be viewable without a CSS file.",
+        answer: "true",
+        explanation: "HTML alone is enough to create a viewable webpage — it just has no styling. The browser will display the content with default styles. CSS is what makes it look designed."
+      }
     ]
   },
   { id: "html",       title: "HTML",               icon: "🏗️", unlocked: false },

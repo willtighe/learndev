@@ -68,6 +68,13 @@ const matchState = {
   selectedTerm: null
 };
 
+const quizState = {
+  questions: [],
+  currentIndex: 0,
+  score: 0,
+  answered: false
+};
+
 function selectStage(id) {
   stageState.currentStageId = id;
   stageState.currentSlideIndex = 0;
@@ -338,7 +345,236 @@ function checkRoundComplete() {
 }
 
 function startQuiz() {
-  console.log('Quiz starting');
+  const stage = STAGES.find(s => s.id === stageState.currentStageId);
+  quizState.questions = shuffle(stage.quiz || []).slice(0, 8);
+  quizState.currentIndex = 0;
+  quizState.score = 0;
+  quizState.answered = false;
+
+  // Rebuild screen structure — handles first load and TRY AGAIN after results view
+  const screen = document.getElementById('quiz-screen');
+  screen.innerHTML = `
+    <div class="quiz-header">
+      <span class="quiz-progress" id="quiz-progress"></span>
+      <span class="quiz-score" id="quiz-score"></span>
+    </div>
+    <div class="question-box">
+      <div class="quiz-type-label" id="quiz-type-label"></div>
+      <p class="question-text" id="quiz-question"></p>
+    </div>
+    <div class="quiz-answers" id="quiz-answers"></div>
+    <div class="quiz-feedback" id="quiz-feedback" style="display: none;">
+      <div class="quiz-feedback-banner" id="quiz-feedback-banner"></div>
+      <p class="quiz-feedback-explanation" id="quiz-feedback-explanation"></p>
+      <button class="btn-primary" id="quiz-next">NEXT →</button>
+    </div>
+  `;
+  document.getElementById('quiz-next').addEventListener('click', nextQuizQuestion);
+
+  showScreen('quiz-screen');
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const q = quizState.questions[quizState.currentIndex];
+  const total = quizState.questions.length;
+
+  document.getElementById('quiz-progress').textContent =
+    `Question ${quizState.currentIndex + 1} of ${total}`;
+  document.getElementById('quiz-score').textContent =
+    `Score: ${quizState.score}`;
+
+  const typeLabels = {
+    'multiple-choice': 'MULTIPLE CHOICE',
+    'true-false':      'TRUE OR FALSE',
+    'fill-blank':      'FILL IN THE BLANK'
+  };
+  document.getElementById('quiz-type-label').textContent = typeLabels[q.type] || '';
+
+  const questionEl = document.getElementById('quiz-question');
+  if (q.type === 'fill-blank') {
+    questionEl.innerHTML = q.question.replace(
+      '___',
+      '<span style="border-bottom: 2px solid var(--border-active); padding: 0 8px; color: var(--border-active);">___</span>'
+    );
+  } else {
+    questionEl.textContent = q.question;
+  }
+
+  const answersEl = document.getElementById('quiz-answers');
+  answersEl.innerHTML = '';
+  document.getElementById('quiz-feedback').style.display = 'none';
+  quizState.answered = false;
+
+  if (q.type === 'multiple-choice' || q.type === 'fill-blank') {
+    answersEl.classList.add('multiple-choice');
+    q.options.forEach(option => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-answer-btn';
+      btn.textContent = option;
+      btn.addEventListener('click', () => submitQuizAnswer(btn, q.answer));
+      answersEl.appendChild(btn);
+    });
+
+  } else if (q.type === 'true-false') {
+    answersEl.classList.remove('multiple-choice');
+    ['TRUE', 'FALSE'].forEach(label => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-answer-btn';
+      btn.textContent = label;
+      btn.style.width  = '140px';
+      btn.style.margin = '0 auto';
+      btn.addEventListener('click', () => submitQuizAnswer(btn, q.answer));
+      answersEl.appendChild(btn);
+    });
+  }
+}
+
+function submitQuizAnswer(btnEl, correctAnswer) {
+  if (quizState.answered) return;
+  quizState.answered = true;
+
+  document.querySelectorAll('#quiz-answers .quiz-answer-btn').forEach(btn => {
+    btn.disabled = true;
+  });
+
+  const chosen  = btnEl.textContent.trim().toLowerCase();
+  const correct = correctAnswer.trim().toLowerCase();
+  const q       = quizState.questions[quizState.currentIndex];
+  const banner  = document.getElementById('quiz-feedback-banner');
+
+  if (chosen === correct) {
+    btnEl.classList.add('correct');
+    quizState.score += 1;
+    banner.textContent = '> CORRECT';
+    banner.className   = 'quiz-feedback-banner correct';
+  } else {
+    btnEl.classList.add('wrong');
+    document.querySelectorAll('#quiz-answers .quiz-answer-btn').forEach(btn => {
+      if (btn.textContent.trim().toLowerCase() === correct) {
+        btn.classList.add('correct');
+      }
+    });
+    banner.textContent = '> WRONG';
+    banner.className   = 'quiz-feedback-banner wrong';
+  }
+
+  document.getElementById('quiz-feedback-explanation').textContent = q.explanation;
+
+  const isLast = quizState.currentIndex >= quizState.questions.length - 1;
+  document.getElementById('quiz-next').textContent =
+    isLast ? '> SEE RESULTS' : '> NEXT QUESTION';
+
+  document.getElementById('quiz-feedback').style.display = 'block';
+}
+
+function nextQuizQuestion() {
+  if (quizState.currentIndex >= quizState.questions.length - 1) {
+    showQuizResults();
+  } else {
+    quizState.currentIndex += 1;
+    renderQuizQuestion();
+  }
+}
+
+function showQuizResults() {
+  const screen     = document.getElementById('quiz-screen');
+  const total      = quizState.questions.length;
+  const passed     = quizState.score >= 6;
+  const stageIndex = STAGES.findIndex(s => s.id === stageState.currentStageId);
+  const nextStage  = stageIndex !== -1 && stageIndex + 1 < STAGES.length
+    ? STAGES[stageIndex + 1] : null;
+
+  if (passed && nextStage) {
+    nextStage.unlocked = true;
+  }
+
+  screen.innerHTML = '';
+
+  // ── Heading ────────────────────────────────────────
+  const heading = document.createElement('h2');
+  if (passed) {
+    heading.textContent  = 'STAGE COMPLETE';
+    heading.style.cssText =
+      'color: var(--green); font-size: 1.8rem; letter-spacing: 0.15em; margin: 0 0 24px;' +
+      'text-shadow: 0 0 20px rgba(63,185,80,0.4);';
+  } else {
+    heading.textContent  = 'QUIZ FAILED';
+    heading.style.cssText =
+      'color: var(--red); font-size: 1.8rem; letter-spacing: 0.15em; margin: 0 0 24px;';
+  }
+
+  // ── Score display ──────────────────────────────────
+  const scoreWrap = document.createElement('div');
+  scoreWrap.style.cssText = 'text-align: center; margin-bottom: 8px;';
+
+  const scoreBig = document.createElement('p');
+  scoreBig.className   = 'results-score-big';
+  scoreBig.textContent = `${quizState.score} / ${total}`;
+  if (!passed) scoreBig.style.color = 'var(--red)';
+
+  const scoreLabel = document.createElement('p');
+  scoreLabel.className   = 'results-score-label';
+  scoreLabel.textContent = 'correct';
+
+  scoreWrap.appendChild(scoreBig);
+  scoreWrap.appendChild(scoreLabel);
+
+  // ── Info box ───────────────────────────────────────
+  const infoBox = document.createElement('div');
+
+  if (passed) {
+    infoBox.className = 'results-achievement-box';
+
+    const line1 = document.createElement('p');
+    line1.style.cssText = 'color: var(--green); font-size: 0.9rem; margin: 0;';
+    line1.textContent   = `✓ STAGE UNLOCKED: ${nextStage ? nextStage.title.toUpperCase() : 'NEXT STAGE'}`;
+
+    const line2 = document.createElement('p');
+    line2.style.cssText = 'color: var(--text-secondary); font-size: 0.85rem; margin-top: 8px; margin-bottom: 0;';
+    line2.textContent   = `Next up: ${nextStage ? nextStage.title : 'Next stage'}`;
+
+    infoBox.appendChild(line1);
+    infoBox.appendChild(line2);
+  } else {
+    infoBox.className = 'results-fail-box';
+
+    const msg = document.createElement('p');
+    msg.style.cssText = 'color: var(--red); font-size: 0.9rem; margin: 0;';
+    msg.textContent   = 'Score 6 or higher to unlock the next stage.';
+
+    infoBox.appendChild(msg);
+  }
+
+  // ── Buttons ────────────────────────────────────────
+  const btnRow = document.createElement('div');
+  btnRow.className = 'results-btn-row';
+
+  if (passed) {
+    const mapBtn = document.createElement('button');
+    mapBtn.className   = 'btn-primary';
+    mapBtn.textContent = 'BACK TO MAP →';
+    mapBtn.addEventListener('click', showMap);
+    btnRow.appendChild(mapBtn);
+  } else {
+    const retryBtn = document.createElement('button');
+    retryBtn.className   = 'btn-primary';
+    retryBtn.textContent = 'TRY AGAIN →';
+    retryBtn.addEventListener('click', startQuiz);
+
+    const mapBtn = document.createElement('button');
+    mapBtn.className   = 'btn-secondary';
+    mapBtn.textContent = '← BACK TO MAP';
+    mapBtn.addEventListener('click', showMap);
+
+    btnRow.appendChild(retryBtn);
+    btnRow.appendChild(mapBtn);
+  }
+
+  screen.appendChild(heading);
+  screen.appendChild(scoreWrap);
+  screen.appendChild(infoBox);
+  screen.appendChild(btnRow);
 }
 
 function stageNext() {
