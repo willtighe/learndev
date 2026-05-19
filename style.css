@@ -201,6 +201,13 @@ html, body {
   margin: 0 0 16px;
 }
 
+.slide-caption {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 8px;
+}
+
 .stage-nav {
   display: flex;
   justify-content: space-between;
@@ -239,6 +246,44 @@ html, body {
 #btn-back:hover {
   border-color: var(--text-primary);
   color: var(--text-primary);
+}
+
+/* ── Reference ────────────────────────────────────── */
+
+.ref-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 680px;
+}
+
+@media (min-width: 640px) {
+  .ref-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.ref-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.ref-term {
+  color: var(--text-heading);
+  font-size: 0.95rem;
+  font-weight: bold;
+  margin: 0 0 8px;
+  letter-spacing: 0.05em;
+}
+
+.ref-definition {
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin: 0;
 }
 
 /* ── Mobile ───────────────────────────────────────── */
