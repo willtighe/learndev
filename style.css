@@ -286,6 +286,92 @@ html, body {
   margin: 0;
 }
 
+/* ── Matching ─────────────────────────────────────── */
+
+.match-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 680px;
+  margin: 24px 0;
+}
+
+.match-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.match-term {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  cursor: grab;
+  user-select: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.match-term:hover {
+  border-color: var(--border-active);
+}
+
+.match-term.selected {
+  border-color: var(--border-active);
+  background: #0D1F33;
+}
+
+.match-term.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.match-definition {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  transition: border-color 0.2s, background 0.2s;
+  min-height: 60px;
+}
+
+.match-definition.drag-over {
+  border-color: var(--border-active);
+  background: #0D1F33;
+}
+
+.match-term.correct,
+.match-definition.correct {
+  border-color: var(--green);
+  background: #0D2818;
+  color: var(--green);
+  cursor: default;
+  pointer-events: none;
+}
+
+.match-term.wrong,
+.match-definition.wrong {
+  border-color: var(--red);
+  background: #2D0F0F;
+  color: var(--red);
+}
+
+.match-status {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  min-height: 24px;
+  margin: 8px 0;
+}
+
 /* ── Mobile ───────────────────────────────────────── */
 
 @media (max-width: 480px) {
@@ -295,5 +381,9 @@ html, body {
 
   .splash-title {
     font-size: 2.2rem;
+  }
+
+  .match-area {
+    grid-template-columns: 1fr;
   }
 }

@@ -49,6 +49,21 @@
     </div>
   </div>
 
+  <!-- Screen 5: Matching -->
+  <div id="matching-screen" class="screen">
+    <div class="stage-header">
+      <button class="stage-back-btn" onclick="showReference()">← BACK</button>
+      <span class="stage-title-text" id="match-title">MATCH THE TERMS</span>
+      <span class="stage-phase-label" id="match-round">Round 1 of 2</span>
+    </div>
+    <div class="match-area" id="match-area">
+      <div class="match-column" id="match-terms"></div>
+      <div class="match-column" id="match-definitions"></div>
+    </div>
+    <div class="match-status" id="match-status"></div>
+    <button id="match-next" onclick="startQuiz()" style="display: none;">NEXT →</button>
+  </div>
+
   <script src="content.js"></script>
   <script src="engine.js"></script>
 </body>

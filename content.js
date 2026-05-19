@@ -73,6 +73,25 @@ const STAGES = [
       { term: "CSS",        definition: "The style of a webpage. It controls colors, fonts, spacing, and layout." },
       { term: "JavaScript", definition: "The behavior of a webpage. It makes things interactive — clicks, animations, live updates." },
       { term: "DNS",        definition: "The system that translates a domain name like google.com into the actual address of a server." }
+    ],
+    matching: [
+      {
+        round: 1,
+        pairs: [
+          { term: "Browser", match: "Software that requests and displays web pages" },
+          { term: "Server",  match: "A computer always on, storing and sending files" },
+          { term: "URL",     match: "The address of a specific page on the web" }
+        ]
+      },
+      {
+        round: 2,
+        pairs: [
+          { term: "HTML",       match: "Defines the structure of a webpage" },
+          { term: "CSS",        match: "Controls the visual style of a webpage" },
+          { term: "JavaScript", match: "Makes a webpage interactive and dynamic" },
+          { term: "DNS",        match: "Translates domain names into server addresses" }
+        ]
+      }
     ]
   },
   { id: "html",       title: "HTML",               icon: "🏗️", unlocked: false },

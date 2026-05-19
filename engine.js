@@ -62,6 +62,12 @@ const stageState = {
   currentPhase: 'learn'  // "learn" | "reference" | "matching" | "quiz"
 };
 
+const matchState = {
+  currentRound: 0,
+  solved: 0,
+  selectedTerm: null
+};
+
 function selectStage(id) {
   stageState.currentStageId = id;
   stageState.currentSlideIndex = 0;
@@ -181,8 +187,158 @@ function showReference() {
   showScreen('reference-screen');
 }
 
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 function startMatching() {
-  console.log('startMatching: matching screen coming soon');
+  const stage = STAGES.find(s => s.id === stageState.currentStageId);
+  matchState.currentRound = 0;
+  matchState.solved = 0;
+  matchState.selectedTerm = null;
+  renderMatchRound();
+  showScreen('matching-screen');
+}
+
+function renderMatchRound() {
+  const stage = STAGES.find(s => s.id === stageState.currentStageId);
+  const round = stage.matching[matchState.currentRound];
+  const totalRounds = stage.matching.length;
+
+  document.getElementById('match-round').textContent =
+    `Round ${matchState.currentRound + 1} of ${totalRounds}`;
+
+  const shuffledTerms = shuffle(round.pairs);
+  const shuffledDefs  = shuffle(round.pairs);
+
+  const termsContainer = document.getElementById('match-terms');
+  const defsContainer  = document.getElementById('match-definitions');
+  termsContainer.innerHTML = '';
+  defsContainer.innerHTML  = '';
+  document.getElementById('match-status').textContent = '';
+  document.getElementById('match-next').style.display = 'none';
+
+  shuffledTerms.forEach(pair => {
+    const el = document.createElement('div');
+    el.className    = 'match-term';
+    el.dataset.term = pair.term;
+    el.draggable    = true;
+    el.textContent  = pair.term;
+
+    el.addEventListener('dragstart', e => {
+      matchState.selectedTerm = el;
+      el.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', pair.term);
+    });
+
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+    });
+
+    el.addEventListener('click', () => selectTerm(el));
+
+    termsContainer.appendChild(el);
+  });
+
+  shuffledDefs.forEach(pair => {
+    const el = document.createElement('div');
+    el.className      = 'match-definition';
+    el.dataset.match  = pair.match;
+    el.textContent    = pair.match;
+
+    el.addEventListener('dragover', e => {
+      e.preventDefault();
+      el.classList.add('drag-over');
+    });
+
+    el.addEventListener('dragleave', () => {
+      el.classList.remove('drag-over');
+    });
+
+    el.addEventListener('drop', e => {
+      el.classList.remove('drag-over');
+      const termText = e.dataTransfer.getData('text/plain');
+      const termEl   = document.querySelector(`.match-term[data-term="${CSS.escape(termText)}"]`);
+      if (termEl) checkMatch(termEl, el);
+    });
+
+    el.addEventListener('click', () => dropOnDefinition(el));
+
+    defsContainer.appendChild(el);
+  });
+}
+
+function selectTerm(el) {
+  if (el.classList.contains('correct')) return;
+  if (matchState.selectedTerm) {
+    matchState.selectedTerm.classList.remove('selected');
+  }
+  matchState.selectedTerm = el;
+  el.classList.add('selected');
+}
+
+function dropOnDefinition(el) {
+  if (el.classList.contains('correct')) return;
+  if (!matchState.selectedTerm) return;
+  checkMatch(matchState.selectedTerm, el);
+  matchState.selectedTerm = null;
+}
+
+function checkMatch(termEl, defEl) {
+  const stage = STAGES.find(s => s.id === stageState.currentStageId);
+  const round = stage.matching[matchState.currentRound];
+  const term  = termEl.dataset.term || termEl.textContent;
+  const pair  = round.pairs.find(p => p.term === term);
+
+  if (pair && pair.match === defEl.dataset.match) {
+    termEl.classList.add('correct');
+    defEl.classList.add('correct');
+    termEl.classList.remove('selected');
+    matchState.selectedTerm = null;
+    matchState.solved += 1;
+    document.getElementById('match-status').textContent = '✓ Correct!';
+    checkRoundComplete();
+  } else {
+    termEl.classList.add('wrong');
+    defEl.classList.add('wrong');
+    document.getElementById('match-status').textContent = '✗ Try again';
+    setTimeout(() => {
+      termEl.classList.remove('wrong');
+      defEl.classList.remove('wrong');
+      document.getElementById('match-status').textContent = '';
+      termEl.classList.remove('selected');
+      matchState.selectedTerm = null;
+    }, 800);
+  }
+}
+
+function checkRoundComplete() {
+  const stage = STAGES.find(s => s.id === stageState.currentStageId);
+  const round = stage.matching[matchState.currentRound];
+
+  if (matchState.solved >= round.pairs.length) {
+    if (matchState.currentRound + 1 < stage.matching.length) {
+      setTimeout(() => {
+        matchState.currentRound += 1;
+        matchState.solved = 0;
+        renderMatchRound();
+      }, 800);
+    } else {
+      document.getElementById('match-status').textContent = '✓ All matched! Ready for the quiz.';
+      const nextBtn = document.getElementById('match-next');
+      nextBtn.style.display = 'block';
+      nextBtn.onclick = startQuiz;
+    }
+  }
+}
+
+function startQuiz() {
+  console.log('Quiz starting');
 }
 
 function stageNext() {
