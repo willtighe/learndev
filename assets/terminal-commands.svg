@@ -1,0 +1,63 @@
+<svg width="100%" viewBox="0 0 680 380" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>Essential terminal commands</title>
+  <desc>Diagram showing six essential terminal commands: pwd, ls, cd, touch, and mkdir</desc>
+
+  <!-- Background -->
+  <rect width="680" height="380" fill="#0D1117"/>
+
+  <!-- Top label -->
+  <text x="340" y="30" text-anchor="middle" fill="#8B949E"
+        font-family="Courier New, monospace" font-size="11"
+        letter-spacing="0.15em">ESSENTIAL TERMINAL COMMANDS</text>
+
+  <!-- Terminal window frame -->
+  <rect x="40" y="50" width="600" height="300" rx="8"
+        fill="#161B22" stroke="#30363D" stroke-width="1"/>
+
+  <!-- Title bar -->
+  <rect x="40" y="50" width="600" height="32" rx="8"
+        fill="#21262D" stroke="#30363D" stroke-width="1"/>
+
+  <!-- Traffic light circles -->
+  <circle cx="64"  cy="66" r="6" fill="#F85149"/>
+  <circle cx="84"  cy="66" r="6" fill="#D29922"/>
+  <circle cx="104" cy="66" r="6" fill="#3FB950"/>
+
+  <!-- Terminal title -->
+  <text x="340" y="71" text-anchor="middle" fill="#8B949E"
+        font-family="Courier New, monospace" font-size="12">zsh — terminal</text>
+
+  <!-- Row 1: pwd -->
+  <text x="56"  y="110" font-family="Courier New, monospace" font-size="14" fill="#58A6FF">$</text>
+  <text x="72"  y="110" font-family="Courier New, monospace" font-size="14" fill="#3FB950">pwd</text>
+  <text x="130" y="110" font-family="Courier New, monospace" font-size="13" fill="#8B949E">— print working directory (where am I?)</text>
+
+  <!-- Row 2: ls -->
+  <text x="56"  y="146" font-family="Courier New, monospace" font-size="14" fill="#58A6FF">$</text>
+  <text x="72"  y="146" font-family="Courier New, monospace" font-size="14" fill="#3FB950">ls</text>
+  <text x="130" y="146" font-family="Courier New, monospace" font-size="13" fill="#8B949E">— list files and folders here</text>
+
+  <!-- Row 3: cd projects -->
+  <text x="56"  y="182" font-family="Courier New, monospace" font-size="14" fill="#58A6FF">$</text>
+  <text x="72"  y="182" font-family="Courier New, monospace" font-size="14" fill="#3FB950">cd projects</text>
+  <text x="210" y="182" font-family="Courier New, monospace" font-size="13" fill="#8B949E">— move into the projects folder</text>
+
+  <!-- Row 4: cd .. -->
+  <text x="56"  y="218" font-family="Courier New, monospace" font-size="14" fill="#58A6FF">$</text>
+  <text x="72"  y="218" font-family="Courier New, monospace" font-size="14" fill="#3FB950">cd ..</text>
+  <text x="155" y="218" font-family="Courier New, monospace" font-size="13" fill="#8B949E">— go up one level</text>
+
+  <!-- Row 5: touch file.html -->
+  <text x="56"  y="254" font-family="Courier New, monospace" font-size="14" fill="#58A6FF">$</text>
+  <text x="72"  y="254" font-family="Courier New, monospace" font-size="14" fill="#3FB950">touch file.html</text>
+  <text x="240" y="254" font-family="Courier New, monospace" font-size="13" fill="#8B949E">— create a new empty file</text>
+
+  <!-- Row 6: mkdir my-project -->
+  <text x="56"  y="290" font-family="Courier New, monospace" font-size="14" fill="#58A6FF">$</text>
+  <text x="72"  y="290" font-family="Courier New, monospace" font-size="14" fill="#3FB950">mkdir my-project</text>
+  <text x="252" y="290" font-family="Courier New, monospace" font-size="13" fill="#8B949E">— create a new folder</text>
+
+  <!-- Bottom note -->
+  <text x="340" y="365" text-anchor="middle" fill="#8B949E"
+        font-family="Courier New, monospace" font-size="12">These 6 commands are enough to navigate any Mac or Linux system.</text>
+</svg>
