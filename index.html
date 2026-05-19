@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>learndev</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Screen 1: Splash -->
+  <div id="splash" class="screen">
+    <h1 class="splash-title">LEARNDEV</h1>
+    <p class="splash-tagline">Learn to build. One concept at a time.</p>
+    <button class="btn-primary" onclick="startGame()">START</button>
+  </div>
+
+  <!-- Screen 2: Map -->
+  <div id="map-screen" class="screen">
+    <h2 class="map-heading">YOUR LEARNING PATH</h2>
+    <div class="map-container" id="map-container"></div>
+  </div>
+
+  <!-- Screen 3: Stage -->
+  <div id="stage-screen" class="screen">
+    <div class="stage-header">
+      <button class="stage-back-btn" onclick="showMap()">← MAP</button>
+      <span class="stage-title-text" id="stage-title"></span>
+      <span class="stage-phase-label" id="stage-phase"></span>
+    </div>
+    <div id="stage-content"></div>
+    <div class="stage-nav">
+      <button id="btn-back" onclick="stagePrev()">← BACK</button>
+      <button id="btn-next" onclick="stageNext()">NEXT →</button>
+    </div>
+  </div>
+
+  <script src="content.js"></script>
+  <script src="engine.js"></script>
+</body>
+</html>
